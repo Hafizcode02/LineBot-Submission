@@ -34,7 +34,7 @@ class UserGateway
         $this->db->table('users')
             ->insert([
                 'user_id' => $userId,
-                'displayName' => $displayName
+                'display_name' => $displayName
             ]);
     }
 }

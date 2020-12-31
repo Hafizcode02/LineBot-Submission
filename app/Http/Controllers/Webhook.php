@@ -122,18 +122,19 @@ class Webhook extends Controller
             $profile = $res->getJSONDecodedBody();
 
             $message = "Salam Kenal, " . $profile['displayName'] . "!\n";
-            $message .= "Selamat Datang di Line Bot Tebak Gambar \n";
-            $message .= "Kamu bisa memilih Level Tebak Gambar yang ada di Bot ini \n";
-            $message .= "Saat ini Level yang tersedia adalah 1 - 2";
-            $message .= "Untuk Memulai Kamu bisa Menggunakan Perintah \"/start level 1\" untuk memulai Bot";
+            $message .= "Selamat Datang di Line Bot Tebak Gambar, \n";
+            $message .= "Kamu bisa memilih Level Tebak Gambar yang ada di Bot ini. \n";
+            $message .= "List Perintah : \n";
+            $message .= "1. \"/start level 1\"";
+            $message .= "2. \"/start level 2\"";
 
             $textMessageBuilder = new TextMessageBuilder($message);
 
-            $message2 = "Game ini juga ditunjukan sebagai penghibur di kala pandemi ini.";
-            $message2 .= "di bot ini juga kalian bisa mengecek Statistik Virus Covid-19 di Indonesia, dengan query";
-            $message2 .= "1. \"/coronastats\" untuk melihat data penyebaran Covid-19 di Indonesia";
-            $message2 .= "2. \"/coronastats provinsi\" untuk melihat data penyebaran di wilayah provinsi";
-            $message2 .= "3. \"/coronastats provinsi kota\" untuk melihat data penyebaran di wilayah kota";
+            $message2 = "Game ini juga ditunjukan sebagai penghibur di kala pandemi ini.\n";
+            $message2 .= "di bot ini juga kalian bisa mengecek Statistik Virus Covid-19 di Indonesia, dengan query :\n";
+            $message2 .= "1. \"/coronastats\" untuk melihat data penyebaran Covid-19 di Indonesia\n";
+            $message2 .= "2. \"/coronastats provinsi\" untuk melihat data penyebaran di wilayah provinsi\n";
+            $message2 .= "3. \"/coronastats provinsi kota\" untuk melihat data penyebaran di wilayah kota\n";
 
             $textMessageBuilder2 = new TextMessageBuilder($message2);
 
@@ -141,7 +142,7 @@ class Webhook extends Controller
 
             $textMessageBuilder3 = new TextMessageBuilder($message3);
 
-            $stickerMessageBuilder = new StickerMessageBuilder(1, 3);
+            $stickerMessageBuilder = new StickerMessageBuilder(1, 114);
 
             $multiMessageBuilder = new MultiMessageBuilder();
             $multiMessageBuilder->add($textMessageBuilder);
