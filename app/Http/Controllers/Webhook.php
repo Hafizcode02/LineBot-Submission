@@ -125,16 +125,16 @@ class Webhook extends Controller
             $message .= "Selamat Datang di Line Bot Tebak Gambar, \n";
             $message .= "Kamu bisa memilih Level Tebak Gambar yang ada di Bot ini. \n";
             $message .= "List Perintah : \n";
-            $message .= "1. \"/start level 1\"";
-            $message .= "2. \"/start level 2\"";
+            $message .= "1. \"/start level 1\" \n";
+            $message .= "2. \"/start level 2\" ";
 
             $textMessageBuilder = new TextMessageBuilder($message);
 
             $message2 = "Game ini juga ditunjukan sebagai penghibur di kala pandemi ini.\n";
             $message2 .= "di bot ini juga kalian bisa mengecek Statistik Virus Covid-19 di Indonesia, dengan query :\n";
-            $message2 .= "1. \"/coronastats\" untuk melihat data penyebaran Covid-19 di Indonesia\n";
-            $message2 .= "2. \"/coronastats provinsi\" untuk melihat data penyebaran di wilayah provinsi\n";
-            $message2 .= "3. \"/coronastats provinsi kota\" untuk melihat data penyebaran di wilayah kota\n";
+            $message2 .= "1. \"/coronastats\" Data Covid-19 Indonesia\n";
+            $message2 .= "2. \"/coronastats provinsi\" Data Covid-19 Provinsi\n";
+            $message2 .= "3. \"/coronastats provinsi kota\" Data Covid 19 Kota";
 
             $textMessageBuilder2 = new TextMessageBuilder($message2);
 
