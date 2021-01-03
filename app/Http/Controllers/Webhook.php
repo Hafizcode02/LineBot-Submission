@@ -209,7 +209,8 @@ class Webhook extends Controller
     private function sendQuestion($replyToken, $questionNum = 1, $level = 1)
     {
         $question = $this->questionGateway->getQuestion($questionNum, $level);
-
+        $message = "silahkan kirim soal lagi" . $question['number'];
+        $textMessageBuilder = new TextMessageBuilder($message);
         // $template = new ButtonTemplateBuilder($question['number'] . "/5", $question['text'], $question['image']);
 
         // $messageBuilder = new TemplateMessageBuilder("Gunakan Mobile App untuk melihat soal", $template);
@@ -233,11 +234,13 @@ class Webhook extends Controller
                 ]
             ],
         ]);
+
+        $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
     }
 
     private function checkAnswer(string $message, $replyToken, string $level)
     {
-        if ($this->questionGateway->isAnswerEqual($this->user['number'], $message, $level)) {
+        if ($this->questionGateway->isAnswerEqual($this->user['number'], strtlower($message), $level)) {
             $this->user['score'] + 2;
             $this->userGateway->setScore($this->user['user_id'], $this->user['score']);
 
