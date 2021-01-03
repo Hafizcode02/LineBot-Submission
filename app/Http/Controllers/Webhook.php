@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Log\Logger;
 use LINE\LINEBot;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
+use LINE\LINEBot\HTTPClient;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
 use LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
@@ -25,6 +26,10 @@ class Webhook extends Controller
      *  @var LINEBot
      */
     private $bot;
+    /**
+     * @var HTTPClient
+     */
+    private $httpClient;
     /**
      * @var Request
      */
@@ -70,8 +75,9 @@ class Webhook extends Controller
         $this->questionGateway = $questionGateway;
 
 
-        $httpClient = new CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
-        $this->bot  = new LINEBot($httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
+        $this->httpClient = new CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
+        // $httpClient = new CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
+        $this->bot  = new LINEBot($this->httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
     }
 
     public function __invoke()
@@ -215,7 +221,7 @@ class Webhook extends Controller
         $parse['body']['contents'][0]['text'] = $question['number'] . "/5";
         $parse['body']['contents'][1]['text'] = $question['text'];
 
-        $this->bot->post(LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/bot/message/reply', [
+        $this->httpClient->post(LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/bot/message/reply', [
             'replyToken' => $replyToken,
             'messages' => [
                 [
