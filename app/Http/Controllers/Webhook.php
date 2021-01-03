@@ -17,6 +17,7 @@ use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
+use SebastianBergmann\Template\Template;
 
 class Webhook extends Controller
 {
@@ -156,6 +157,97 @@ class Webhook extends Controller
                 $profile['userId'],
                 $profile['displayName']
             );
+        }
+    }
+
+    private function textMessage($event)
+    {
+        $userMessage = $event['message']['text'];
+        $uID = $event['source']['userId'];
+        if ($this->user['number'] == 0) {
+            if (strtolower($userMessage) == '/start level 1') {
+                $this->userGateway->setScore($this->user['user_id'], 0);
+                $this->userGateway->setUserProgress($this->user['user_id'], 1);
+                $this->userGateway->setLevel($this->user['user_id'], 1);
+                $this->sendQuestion($event['replyToken'], 1, 1);
+            } else if (strtolower($userMessage) == '/start level 2') {
+                $this->userGateway->setScore($this->user['user_id'], 0);
+                $this->userGateway->setUserProgress($this->user['user_id'], 1);
+                $this->userGateway->setLevel($this->user['user_id'], 2);
+                $this->sendQuestion($event['replyToken'], 1, 2);
+            } else {
+                $message = "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai";
+                $textMessageBuilder = new TextMessageBuilder($message);
+                $this->bot->replyMessage($event['replyToken'], $textMessageBuilder);
+            }
+        } else {
+            $data = $this->userGateway->getUser($uID);
+            $this->checkAnswer($userMessage, $event['replyToken'], $data['level']);
+        }
+    }
+
+    private function stickerMessage($event)
+    {
+        $stickerMessageBuilder = new StickerMessageBuilder(1, 114);
+        $message = "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai";
+        $textMessageBuilder = new TextMessageBuilder($message);
+
+        $multiMessageBuilder = new MultiMessageBuilder();
+        $multiMessageBuilder->add($stickerMessageBuilder);
+        $multiMessageBuilder->add($textMessageBuilder);
+
+        $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
+    }
+
+    private function sendQuestion($replyToken, $questionNum = 1, $level)
+    {
+        $question = $this->questionGateway->getQuestion($questionNum, $level);
+
+        $template = new ButtonTemplateBuilder($question['number'] . "/5", $question['text'], $question['image']);
+
+        $messageBuilder = new TemplateMessageBuilder("Gunakan Mobile App untuk melihat soal", $template);
+
+        $response = $this->bot->replyMessage($replyToken, $messageBuilder);
+    }
+
+    private function checkAnswer($message, $replyToken, $level)
+    {
+        if ($this->questionGateway->isAnswerEqual($this->user['number'], $message, $level)) {
+            $this->user['score'] + 2;
+            $this->userGateway->setScore($this->user['user_id'], $this->user['score']);
+
+            $message = "Benar, Jawabannya adalah : " . ucwords($message);
+            $textMessageBuilder = new TextMessageBuilder($message);
+            $this->bot->replyMessage($replyToken, $textMessageBuilder);
+        } else {
+            $message = "Jawaban Kamu Salah, Coba Lagi";
+            $textMessageBuilder = new TextMessageBuilder($message);
+            $this->bot->replyMessage($replyToken, $textMessageBuilder);
+
+            $this->sendQuestion($replyToken, $this->user['number'], $level);
+        }
+
+        if ($this->user['number'] < 5) {
+            $this->userGateway->setUserProgress($this->user['user_id'], $this->user['number'] + 1);
+            $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
+        } else {
+            $message = "Selamat Kamu telah menyelesaikan Level" . $this->user['level'];
+            $textMessageBuilder = new TextMessageBuilder($message);
+
+            $stickerMessageBuilder = new StickerMessageBuilder(1, 100);
+
+            $messages = "Ayo Mulai Lagi dengan level berikutnya \n";
+            $messages .= "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai";
+            $textmessagebuilders = new TextMessageBuilder($messages);
+
+            $multiMessageBuilder = new MultiMessageBuilder();
+            $multiMessageBuilder->add($textMessageBuilder);
+            $multiMessageBuilder->add($stickerMessageBuilder);
+            $multiMessageBuilder->add($textmessagebuilders);
+
+            $this->bot->replyMessage($replyToken, $multiMessageBuilder);
+            $this->userGateway->setUserProgress($this->user['user_id'], 0);
+            $this->userGateway->setLevel($this->user['user_id'], 0);
         }
     }
 }

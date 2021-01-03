@@ -37,4 +37,31 @@ class UserGateway
                 'display_name' => $displayName
             ]);
     }
+
+    public function setUserProgress(string $userId, int $questionNumber)
+    {
+        $this->db->table('users')
+            ->update([
+                'number' => $questionNumber,
+                'user_id' => $userId
+            ]);
+    }
+
+    public function setScore(string $userId, int $score)
+    {
+        $this->db->table('users')
+            ->update([
+                'score' => $score,
+                'user_id' => $userId
+            ]);
+    }
+
+    public function setLevel(string $userId, int $level)
+    {
+        $this->db->table('users')
+            ->update([
+                'level' => $level,
+                'user_id' => $userId
+            ]);
+    }
 }
