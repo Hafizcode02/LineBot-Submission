@@ -1,0 +1,35 @@
+{
+    "type": "bubble",
+    "hero": {
+      "type": "image",
+      "url": "",
+      "size": "full",
+      "aspectRatio": "20:13",
+      "aspectMode": "cover",
+      "action": {
+        "type": "uri",
+        "uri": "http://linecorp.com/"
+      }
+    },
+    "body": {
+      "type": "box",
+      "layout": "vertical",
+      "contents": [
+        {
+          "type": "text",
+          "text": "",
+          "weight": "bold",
+          "size": "lg"
+        },
+        {
+          "type": "text",
+          "text": "",
+          "weight": "regular",
+          "size": "sm",
+          "margin": "md",
+          "position": "relative",
+          "wrap": true
+        }
+      ]
+    }
+  }

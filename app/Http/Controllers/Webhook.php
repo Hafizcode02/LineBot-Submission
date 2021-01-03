@@ -203,11 +203,28 @@ class Webhook extends Controller
     {
         $question = $this->questionGateway->getQuestion($questionNum, $level);
 
-        $template = new ButtonTemplateBuilder($question['number'] . "/5", $question['text'], $question['image']);
+        // $template = new ButtonTemplateBuilder($question['number'] . "/5", $question['text'], $question['image']);
 
-        $messageBuilder = new TemplateMessageBuilder("Gunakan Mobile App untuk melihat soal", $template);
+        // $messageBuilder = new TemplateMessageBuilder("Gunakan Mobile App untuk melihat soal", $template);
 
-        $response = $this->bot->replyMessage($replyToken, $messageBuilder);
+        // $response = $this->bot->replyMessage($replyToken, $messageBuilder);
+
+        $flex_tmp = file_get_contents(public_path('template/flex.json'));
+        $parse = json_decode($flex_tmp);
+        $parse['hero']['url'] = $question['image'];
+        $parse['body']['contents'][0]['text'] = $question['number'] . "/5";
+        $parse['body']['contents'][1]['text'] = $question['text'];
+
+        $this->bot->post(LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/bot/message/reply', [
+            'replyToken' => $replyToken,
+            'messages' => [
+                [
+                    'type' => 'flex',
+                    'altText' => 'Test Flex Message',
+                    'contents' => $parse
+                ]
+            ],
+        ]);
     }
 
     private function checkAnswer($message, $replyToken, $level)
