@@ -240,7 +240,7 @@ class Webhook extends Controller
 
     private function checkAnswer(string $message, $replyToken, string $level)
     {
-        if ($this->questionGateway->isAnswerEqual($this->user['number'], strtlower($message), $level)) {
+        if ($this->questionGateway->isAnswerEqual($this->user['number'], strtolower($message), $level)) {
             $this->user['score'] + 2;
             $this->userGateway->setScore($this->user['user_id'], $this->user['score']);
 
