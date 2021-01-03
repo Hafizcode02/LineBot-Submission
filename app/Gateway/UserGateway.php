@@ -22,7 +22,7 @@ class UserGateway
             ->where('user_id', $userId)
             ->first();
 
-        if (!$user) {
+        if ($user) {
             return (array) $user;
         }
 

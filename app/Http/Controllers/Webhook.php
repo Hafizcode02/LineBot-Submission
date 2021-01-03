@@ -116,9 +116,9 @@ class Webhook extends Controller
         return $this->response;
     }
 
-    private function followCallback($evt)
+    private function followCallback($event)
     {
-        $res = $this->bot->getProfile($evt['source']['userId']);
+        $res = $this->bot->getProfile($event['source']['userId']);
         if ($res->isSucceeded()) {
             $profile = $res->getJSONDecodedBody();
 
@@ -151,7 +151,7 @@ class Webhook extends Controller
             $multiMessageBuilder->add($textMessageBuilder3);
             $multiMessageBuilder->add($stickerMessageBuilder);
 
-            $this->bot->replyMessage($evt['replyToken'], $multiMessageBuilder);
+            $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
 
             $this->userGateway->saveUser(
                 $profile['userId'],
