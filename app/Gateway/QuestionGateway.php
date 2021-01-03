@@ -30,7 +30,7 @@ class QuestionGateway
         return null;
     }
 
-    function isAnswerEqual(int $number, string $answer, int $level)
+    function isAnswerEqual(int $number, string $answer, string $level)
     {
         return $this->db->table('questions')
             ->where('number', $number)
