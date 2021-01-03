@@ -18,6 +18,7 @@ use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
 use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
+use PhpParser\JsonDecoder;
 use SebastianBergmann\Template\Template;
 
 class Webhook extends Controller
@@ -220,6 +221,7 @@ class Webhook extends Controller
         $parse['hero']['url'] = $question['image'];
         $parse['body']['contents'][0]['text'] = $question['number'] . "/5";
         $parse['body']['contents'][1]['text'] = $question['text'];
+        $convertedJson = json_encode($parse);
 
         $this->httpClient->post(LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/bot/message/reply', [
             'replyToken' => $replyToken,
@@ -227,7 +229,7 @@ class Webhook extends Controller
                 [
                     'type' => 'flex',
                     'altText' => 'Test Flex Message',
-                    'contents' => $parse
+                    'contents' => json_decode($convertedJson)
                 ]
             ],
         ]);
