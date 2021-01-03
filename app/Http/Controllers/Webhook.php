@@ -206,7 +206,7 @@ class Webhook extends Controller
         $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
     }
 
-    private function sendQuestion($replyToken, $questionNum = 1, $level)
+    private function sendQuestion($replyToken, $questionNum = 1, $level = 1)
     {
         $question = $this->questionGateway->getQuestion($questionNum, $level);
 
@@ -245,7 +245,7 @@ class Webhook extends Controller
             $textMessageBuilder = new TextMessageBuilder($message);
             $this->bot->replyMessage($replyToken, $textMessageBuilder);
         } else {
-            $message = "Jawaban Kamu Salah, Coba Lagi". $message ." ".$level." ".$this->user['number'];
+            $message = "Jawaban Kamu Salah, Coba Lagi" . $message . " " . $level . " " . $this->user['number'];
             $textMessageBuilder = new TextMessageBuilder($message);
             $this->bot->replyMessage($replyToken, $textMessageBuilder);
 
