@@ -240,7 +240,23 @@ class Webhook extends Controller
             $this->bot->replyMessage($replyToken, $textMessageBuilder);
 
             $this->userGateway->setUserProgress($this->user['user_id'], $this->user['number'] + 1);
-            $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
+            // $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
+
+            $message = "Selamat Kamu telah menyelesaikan Level" . $this->user['level'];
+            $textMessageBuilder = new TextMessageBuilder($message);
+
+            $stickerMessageBuilder = new StickerMessageBuilder(1, 100);
+
+            $messages = "Ayo Mulai Lagi dengan level berikutnya \n";
+            $messages .= "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai";
+            $textmessagebuilders = new TextMessageBuilder($messages);
+
+            $multiMessageBuilder = new MultiMessageBuilder();
+            $multiMessageBuilder->add($textMessageBuilder);
+            $multiMessageBuilder->add($stickerMessageBuilder);
+            $multiMessageBuilder->add($textmessagebuilders);
+
+            $this->bot->replyMessage($replyToken, $multiMessageBuilder);
             // $replyTokensIf = $replyToken;
 
             // if ($this->user['number'] < 5) {
