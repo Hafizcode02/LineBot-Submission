@@ -209,7 +209,7 @@ class Webhook extends Controller
 
         // $response = $this->bot->replyMessage($replyToken, $messageBuilder);
 
-        $flex_tmp = file_get_contents('public/template/flex.json');
+        $flex_tmp = file_get_contents('/template/flex.json');
         $parse = json_decode($flex_tmp);
         $parse['hero']['url'] = $question['image'];
         $parse['body']['contents'][0]['text'] = $question['number'] . "/5";
