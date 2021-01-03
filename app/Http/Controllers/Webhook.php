@@ -237,13 +237,6 @@ class Webhook extends Controller
 
     private function checkAnswer($message, $replyToken, $level)
     {
-        print($message);
-        print($replyToken);
-        print($level);
-        print_r($message);
-        print_r($replyToken);
-        print_r($level);
-
         if ($this->questionGateway->isAnswerEqual($this->user['number'], $message, $level)) {
             $this->user['score'] + 2;
             $this->userGateway->setScore($this->user['user_id'], $this->user['score']);
@@ -252,7 +245,7 @@ class Webhook extends Controller
             $textMessageBuilder = new TextMessageBuilder($message);
             $this->bot->replyMessage($replyToken, $textMessageBuilder);
         } else {
-            $message = "Jawaban Kamu Salah, Coba Lagi";
+            $message = "Jawaban Kamu Salah, Coba Lagi". $message ." ".$level." ".$this->user['number'];
             $textMessageBuilder = new TextMessageBuilder($message);
             $this->bot->replyMessage($replyToken, $textMessageBuilder);
 
