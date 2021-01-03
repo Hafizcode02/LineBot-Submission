@@ -209,13 +209,6 @@ class Webhook extends Controller
     private function sendQuestion($replyToken, $questionNum = 1, $level = 1)
     {
         $question = $this->questionGateway->getQuestion($questionNum, $level);
-        $message = "ayo kirim soal lagi" . $question['number'];
-        $textMessageBuilder = new TextMessageBuilder($message);
-        // $template = new ButtonTemplateBuilder($question['number'] . "/5", $question['text'], $question['image']);
-
-        // $messageBuilder = new TemplateMessageBuilder("Gunakan Mobile App untuk melihat soal", $template);
-
-        // $response = $this->bot->replyMessage($replyToken, $messageBuilder);
 
         $flex_tmp = file_get_contents(url('/template/flex.json'));
         $parse = json_decode($flex_tmp, true);
@@ -234,8 +227,6 @@ class Webhook extends Controller
                 ]
             ],
         ]);
-
-        $this->bot->replyMessage($replyToken, $textMessageBuilder);
     }
 
     private function checkAnswer(string $message, $replyToken, string $level)
@@ -248,9 +239,11 @@ class Webhook extends Controller
             $textMessageBuilder = new TextMessageBuilder($message);
             $this->bot->replyMessage($replyToken, $textMessageBuilder);
 
+            $replyTokensIf = $replyToken;
+
             if ($this->user['number'] < 5) {
                 $this->userGateway->setUserProgress($this->user['user_id'], $this->user['number'] + 1);
-                $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
+                $this->sendQuestion($replyTokensIf, $this->user['number'] + 1, $level);
             } else {
                 $message = "Selamat Kamu telah menyelesaikan Level" . $this->user['level'];
                 $textMessageBuilder = new TextMessageBuilder($message);
@@ -266,7 +259,7 @@ class Webhook extends Controller
                 $multiMessageBuilder->add($stickerMessageBuilder);
                 $multiMessageBuilder->add($textmessagebuilders);
 
-                $this->bot->replyMessage($replyToken, $multiMessageBuilder);
+                $this->bot->replyMessage($replyTokensIf, $multiMessageBuilder);
                 $this->userGateway->setUserProgress($this->user['user_id'], 0);
                 $this->userGateway->setLevel($this->user['user_id'], 0);
             }
