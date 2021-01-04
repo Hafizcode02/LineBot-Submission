@@ -124,7 +124,7 @@ class Webhook extends Controller
             $profile = $res->getJSONDecodedBody();
 
             $message = "Salam Kenal, " . $profile['displayName'] . "!\n";
-            $message .= "Selamat Datang di Line Bot Tebak Gambar, \n";
+            $message .= "Selamat Datang di Line Bot Tebak Gambar, ";
             $message .= "Kamu bisa memilih Level Tebak Gambar yang ada di Bot ini. \n";
             $message .= "List Perintah : \n";
             $message .= "1. \"/start level 1\"\n";
@@ -166,7 +166,9 @@ class Webhook extends Controller
                 $this->userGateway->setLevel($this->user['user_id'], 2);
                 $this->sendQuestion($event['replyToken'], 1, 2);
             } else {
-                $message = "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai";
+                $message = "silahkan kirimkan perintah dibawah untuk memulai: \n";
+                $message .= "1. \"/start level 1\"";
+                $message .= "2. \"/start level 2\"";
                 $textMessageBuilder = new TextMessageBuilder($message);
                 $this->bot->replyMessage($event['replyToken'], $textMessageBuilder);
             }
@@ -196,7 +198,7 @@ class Webhook extends Controller
         $flex_tmp = file_get_contents(url('/template/flex.json'));
         $parse = json_decode($flex_tmp, true);
         $parse['hero']['url'] = $question['image'];
-        $parse['body']['contents'][0]['text'] = $question['number'] . "/5";
+        $parse['body']['contents'][0]['text'] = $question['number'] . "/6";
         $parse['body']['contents'][1]['text'] = $question['text'];
         $convertedJson = json_encode($parse);
 
@@ -226,7 +228,7 @@ class Webhook extends Controller
             $messageTrue = "Benar, Jawabannya adalah : " . ucwords($message);
             $textMessageBuilderTrue = new TextMessageBuilder($messageTrue);
 
-            if ($this->user['number'] < 5) {
+            if ($this->user['number'] < 6) {
                 $this->userGateway->setUserProgress($this->user['user_id'], $this->user['number'] + 1);
                 $send = $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
 
@@ -241,8 +243,10 @@ class Webhook extends Controller
 
                 $stickerMessageBuilderFinish = new StickerMessageBuilder(1, 13);
 
-                $messages = "Ayo Mulai Lagi dengan level berikutnya, \n";
-                $messages .= "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai.";
+                $messages = "Ayo Mulai Lagi dengan level berikutnya,\n";
+                $messages .= "silahkan kirimkan perintah dibawah untuk memulai: \n";
+                $messages .= "1. \"/start level 1\"";
+                $messages .= "2. \"/start level 2\"";
                 $textmessagebuilders = new TextMessageBuilder($messages);
 
                 $multiMessageBuilder = new MultiMessageBuilder();

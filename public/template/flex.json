@@ -4,7 +4,7 @@
         "type": "image",
         "url": "",
         "size": "full",
-        "aspectRatio": "20:13",
+        "aspectRatio": "13:13",
         "aspectMode": "cover"
     },
     "body": {
