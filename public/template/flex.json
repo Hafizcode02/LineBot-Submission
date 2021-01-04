@@ -2,7 +2,7 @@
     "type": "bubble",
     "hero": {
         "type": "image",
-        "url": "https://i.ibb.co/84yNDsM/daun-bayam.png",
+        "url": "",
         "size": "full",
         "aspectRatio": "13:13",
         "aspectMode": "cover"
@@ -13,13 +13,13 @@
         "contents": [
             {
                 "type": "text",
-                "text": "1/6",
+                "text": "",
                 "weight": "bold",
                 "size": "lg"
             },
             {
                 "type": "text",
-                "text": "Apa tebakan yang benar untuk gambar diatas?",
+                "text": "",
                 "weight": "regular",
                 "size": "sm",
                 "margin": "md",

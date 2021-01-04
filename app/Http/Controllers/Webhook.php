@@ -155,7 +155,7 @@ class Webhook extends Controller
     private function textMessage($event)
     {
         $userMessage = $event['message']['text'];
-        $uID = $event['source']['userId'];
+        // $uID = $event['source']['userId'];
         if ($this->user['number'] == 0) {
             if (strtolower($userMessage) == '/start level 1') {
                 $this->userGateway->setUserProgress($this->user['user_id'], 1);
@@ -173,8 +173,8 @@ class Webhook extends Controller
                 $this->bot->replyMessage($event['replyToken'], $textMessageBuilder);
             }
         } else {
-            $data = $this->userGateway->getUser($uID);
-            $this->checkAnswer($userMessage, $event['replyToken'], $data['level']);
+            // $data = $this->userGateway->getUser($uID);
+            $this->checkAnswer($userMessage, $event['replyToken'], $this->user['level']);
         }
     }
 
@@ -200,7 +200,7 @@ class Webhook extends Controller
         $flex_tmp = file_get_contents(url('/template/flex.json'));
         $parse = json_decode($flex_tmp, true);
         $parse['hero']['url'] = $question['image'];
-        $parse['body']['contents'][0]['text'] = $question['number'] . "\n";
+        $parse['body']['contents'][0]['text'] = $question['number'] . "\6";
         $parse['body']['contents'][1]['text'] = $question['text'];
         $convertedJson = json_encode($parse);
 
