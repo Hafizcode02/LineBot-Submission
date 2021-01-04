@@ -13,6 +13,7 @@ use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\HTTPClient;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
+use LINE\LINEBot\MessageBuilder\RawMessageBuilder;
 use LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
 use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
@@ -227,6 +228,14 @@ class Webhook extends Controller
                 ]
             ],
         ]);
+
+        if ($questionNum > 1) {
+            return $flexMessageBuilder = new RawMessageBuilder([
+                'type' => 'flex',
+                'altText' => 'Soal Flex Message',
+                'contents' => json_decode($convertedJson)
+            ]);
+        }
     }
 
     private function checkAnswer(string $message, $replyToken, string $level)
@@ -235,13 +244,17 @@ class Webhook extends Controller
             $this->user['score'] + 2;
             $this->userGateway->setScore($this->user['user_id'], $this->user['score']);
 
-            $message = "Benar, Jawabannya adalah : " . ucwords($message);
-            $textMessageBuilder = new TextMessageBuilder($message);
-            $this->bot->replyMessage($replyToken, $textMessageBuilder);
-
             if ($this->user['number'] < 5) {
+                $message = "Benar, Jawabannya adalah : " . ucwords($message);
+                $textMessageBuilder = new TextMessageBuilder($message);
+
                 $this->userGateway->setUserProgress($this->user['user_id'], $this->user['number'] + 1);
-                $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
+                $send = $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
+
+                $multiMessageBuilder = new MultiMessageBuilder();
+                $multiMessageBuilder->add($textMessageBuilder);
+                $multiMessageBuilder->add($send);
+                $this->bot->replyMessage($replyToken, $multiMessageBuilder);
             } else {
                 $message = "Selamat Kamu telah menyelesaikan Level" . $this->user['level'];
                 $textMessageBuilder = new TextMessageBuilder($message);
@@ -261,7 +274,6 @@ class Webhook extends Controller
                 $this->userGateway->setUserProgress($this->user['user_id'], 0);
                 $this->userGateway->setLevel($this->user['user_id'], 0);
             }
-
         } else {
             $message = "Jawaban Kamu Salah, Coba Lagi" . $message . " " . $level . " " . $this->user['number'];
             $textMessageBuilder = new TextMessageBuilder($message);
