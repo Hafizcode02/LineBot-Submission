@@ -9,18 +9,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Log\Logger;
 use LINE\LINEBot;
-use LINE\LINEBot\Event\MessageEvent\TextMessage;
 use LINE\LINEBot\HTTPClient;
 use LINE\LINEBot\HTTPClient\CurlHTTPClient;
 use LINE\LINEBot\MessageBuilder\MultiMessageBuilder;
 use LINE\LINEBot\MessageBuilder\RawMessageBuilder;
 use LINE\LINEBot\MessageBuilder\StickerMessageBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateBuilder\ButtonTemplateBuilder;
-use LINE\LINEBot\MessageBuilder\TemplateMessageBuilder;
 use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
-use LINE\LINEBot\TemplateActionBuilder\MessageTemplateActionBuilder;
-use PhpParser\JsonDecoder;
-use SebastianBergmann\Template\Template;
 
 class Webhook extends Controller
 {
@@ -78,7 +72,6 @@ class Webhook extends Controller
 
 
         $this->httpClient = new CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
-        // $httpClient = new CurlHTTPClient(getenv('CHANNEL_ACCESS_TOKEN'));
         $this->bot  = new LINEBot($this->httpClient, ['channelSecret' => getenv('CHANNEL_SECRET')]);
     }
 
@@ -277,7 +270,7 @@ class Webhook extends Controller
                 $this->userGateway->setLevel($this->user['user_id'], 0);
             }
         } else {
-            $message = "Jawaban Kamu Salah, Coba Lagi" . $message . " " . $level . " " . $this->user['number'];
+            $message = "Jawaban Kamu Salah, Coba Lagi";
             $textMessageBuilder = new TextMessageBuilder($message);
             $sendAgain = $this->sendQuestion($replyToken, $this->user['number'], $level);
 
