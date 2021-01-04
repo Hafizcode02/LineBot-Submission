@@ -230,6 +230,9 @@ class Webhook extends Controller
             $messageTrue = "Benar, Jawabannya adalah : " . ucwords($message);
             $textMessageBuilderTrue = new TextMessageBuilder($messageTrue);
 
+            file_put_contents('php://stderr', 'UserNumber: ' . $this->user['number']);
+            file_put_contents('php://stderr', 'UserNumber: ' . $level);
+            file_put_contents('php://stderr', 'UserNumber: ' . $replyToken);
             if ($this->user['number'] < 6) {
                 $this->userGateway->setUserProgress($this->user['user_id'], $this->user['number'] + 1);
                 $send = $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
