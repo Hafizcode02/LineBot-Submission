@@ -195,15 +195,7 @@ class Webhook extends Controller
 
     private function sendQuestion($replyToken, $questionNum = 1, $level = 1)
     {
-        file_put_contents('php://stderr', 'UserNumber: ' . $questionNum);
-        file_put_contents('php://stderr', 'UserLevel: ' . $level);
-        file_put_contents('php://stderr', 'ReplyToken: ' . $replyToken);
-
         $question = $this->questionGateway->getQuestion($questionNum, $level);
-
-        file_put_contents('php://stderr', 'image: ' . $question['image']);
-        file_put_contents('php://stderr', 'UserLevel: ' . $question['number']);
-        file_put_contents('php://stderr', 'ReplyToken: ' . $question['text']);
 
         $flex_tmp = file_get_contents(url('/template/flex.json'));
         $parse = json_decode($flex_tmp, true);
@@ -215,7 +207,7 @@ class Webhook extends Controller
         if ($questionNum > 1) {
             return $flexMessageBuilder = new RawMessageBuilder([
                 'type' => 'flex',
-                'altText' => 'Soal Flex Message',
+                'altText' => 'Soal Tebak Gambar',
                 'contents' => json_decode($convertedJson)
             ]);
         } else {
@@ -224,7 +216,7 @@ class Webhook extends Controller
                 'messages' => [
                     [
                         'type' => 'flex',
-                        'altText' => 'Test Flex Message',
+                        'altText' => 'Soal Tebak Gambar',
                         'contents' => json_decode($convertedJson)
                     ]
                 ],
@@ -238,9 +230,6 @@ class Webhook extends Controller
             $messageTrue = "Benar, Jawabannya adalah : " . ucwords($message);
             $textMessageBuilderTrue = new TextMessageBuilder($messageTrue);
 
-            file_put_contents('php://stderr', 'UserNumber: ' . $this->user['number']);
-            file_put_contents('php://stderr', 'UserLevel: ' . $level);
-            file_put_contents('php://stderr', 'ReplyToken: ' . $replyToken);
             if ($this->user['number'] < 6) {
                 $this->userGateway->setUserProgress($this->user['user_id'], $this->user['number'] + 1);
                 $send = $this->sendQuestion($replyToken, $this->user['number'] + 1, $level);
