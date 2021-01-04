@@ -218,22 +218,22 @@ class Webhook extends Controller
         $parse['body']['contents'][1]['text'] = $question['text'];
         $convertedJson = json_encode($parse);
 
-        $this->httpClient->post(LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/bot/message/reply', [
-            'replyToken' => $replyToken,
-            'messages' => [
-                [
-                    'type' => 'flex',
-                    'altText' => 'Test Flex Message',
-                    'contents' => json_decode($convertedJson)
-                ]
-            ],
-        ]);
-
         if ($questionNum > 1) {
             return $flexMessageBuilder = new RawMessageBuilder([
                 'type' => 'flex',
                 'altText' => 'Soal Flex Message',
                 'contents' => json_decode($convertedJson)
+            ]);
+        } else {
+            $this->httpClient->post(LINEBot::DEFAULT_ENDPOINT_BASE . '/v2/bot/message/reply', [
+                'replyToken' => $replyToken,
+                'messages' => [
+                    [
+                        'type' => 'flex',
+                        'altText' => 'Test Flex Message',
+                        'contents' => json_decode($convertedJson)
+                    ]
+                ],
             ]);
         }
     }
