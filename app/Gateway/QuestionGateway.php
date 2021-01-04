@@ -16,7 +16,7 @@ class QuestionGateway
         $this->db = app('db');
     }
 
-    public function getQuestion(int $questionNum, string $level)
+    public function getQuestion(int $questionNum, int $level)
     {
         $question = $this->db->table('questions')
             ->where('number', $questionNum)
@@ -30,7 +30,7 @@ class QuestionGateway
         return null;
     }
 
-    function isAnswerEqual(int $number, string $answer, string $level)
+    function isAnswerEqual(int $number, string $answer, int $level)
     {
         return $this->db->table('questions')
             ->where('number', $number)

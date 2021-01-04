@@ -193,7 +193,7 @@ class Webhook extends Controller
         $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
     }
 
-    private function sendQuestion($replyToken, $questionNum = 1, string $level = '1')
+    private function sendQuestion($replyToken, $questionNum = 1, $level = 1)
     {
         file_put_contents('php://stderr', 'UserNumber: ' . $questionNum);
         file_put_contents('php://stderr', 'UserLevel: ' . $level);
@@ -232,7 +232,7 @@ class Webhook extends Controller
         }
     }
 
-    private function checkAnswer(string $message, $replyToken, string $level)
+    private function checkAnswer(string $message, $replyToken, $level)
     {
         if ($this->questionGateway->isAnswerEqual($this->user['number'], strtolower($message), $level)) {
             $messageTrue = "Benar, Jawabannya adalah : " . ucwords($message);
