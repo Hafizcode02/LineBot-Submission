@@ -199,9 +199,9 @@ class Webhook extends Controller
 
         $flex_tmp = file_get_contents(url('/template/flex.json'));
         $parse = json_decode($flex_tmp, true);
-        $parse['hero']['url'] = $question['image'];
-        $parse['body']['contents'][0]['text'] = $question['number'] . "/6";
-        $parse['body']['contents'][1]['text'] = $question['text'];
+        $parse['hero']['url'] = "https://i.ibb.co/84yNDsM/daun-bayam.png";
+        $parse['body']['contents'][0]['text'] = "1/6";
+        $parse['body']['contents'][1]['text'] = "Apa tebakan yang benar untuk gambar diatas?";
         $convertedJson = json_encode($parse);
 
         if ($questionNum > 1) {
