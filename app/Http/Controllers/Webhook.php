@@ -167,7 +167,7 @@ class Webhook extends Controller
                 $this->sendQuestion($event['replyToken'], 1, 2);
             } else {
                 $message = "silahkan kirimkan perintah dibawah untuk memulai: \n";
-                $message .= "1. \"/start level 1\"";
+                $message .= "1. \"/start level 1\"\n";
                 $message .= "2. \"/start level 2\"";
                 $textMessageBuilder = new TextMessageBuilder($message);
                 $this->bot->replyMessage($event['replyToken'], $textMessageBuilder);
@@ -181,7 +181,9 @@ class Webhook extends Controller
     private function stickerMessage($event)
     {
         $stickerMessageBuilder = new StickerMessageBuilder(1, 114);
-        $message = "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai";
+        $message = "silahkan kirimkan perintah dibawah untuk memulai: \n";
+        $message .= "1. \"/start level 1\"\n";
+        $message .= "2. \"/start level 2\"";
         $textMessageBuilder = new TextMessageBuilder($message);
 
         $multiMessageBuilder = new MultiMessageBuilder();
@@ -245,7 +247,7 @@ class Webhook extends Controller
 
                 $messages = "Ayo Mulai Lagi dengan level berikutnya,\n";
                 $messages .= "silahkan kirimkan perintah dibawah untuk memulai: \n";
-                $messages .= "1. \"/start level 1\"";
+                $messages .= "1. \"/start level 1\"\n";
                 $messages .= "2. \"/start level 2\"";
                 $textmessagebuilders = new TextMessageBuilder($messages);
 
