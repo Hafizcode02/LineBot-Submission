@@ -16,7 +16,7 @@ class QuestionGateway
         $this->db = app('db');
     }
 
-    public function getQuestion(int $questionNum, int $level)
+    public function getQuestion(int $questionNum, string $level)
     {
         $question = $this->db->table('questions')
             ->where('number', $questionNum)
