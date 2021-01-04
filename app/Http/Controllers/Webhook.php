@@ -127,29 +127,20 @@ class Webhook extends Controller
             $message .= "Selamat Datang di Line Bot Tebak Gambar, \n";
             $message .= "Kamu bisa memilih Level Tebak Gambar yang ada di Bot ini. \n";
             $message .= "List Perintah : \n";
-            $message .= "1. \"/start level 1\" \n";
-            $message .= "2. \"/start level 2\" ";
+            $message .= "1. \"/start level 1\"\n";
+            $message .= "2. \"/start level 2\"";
 
             $textMessageBuilder = new TextMessageBuilder($message);
 
-            $message2 = "Game ini juga ditunjukan sebagai penghibur di kala pandemi ini.\n";
-            $message2 .= "di bot ini juga kalian bisa mengecek Statistik Virus Covid-19 di Indonesia, dengan query :\n";
-            $message2 .= "1. \"/coronastats\" Data Covid-19 Indonesia\n";
-            $message2 .= "2. \"/coronastats provinsi\" Data Covid-19 Provinsi\n";
-            $message2 .= "3. \"/coronastats provinsi kota\" Data Covid 19 Kota";
+            $message2 = "Selamat Bersenang senang";
 
             $textMessageBuilder2 = new TextMessageBuilder($message2);
-
-            $message3 = "Selamat Bersenang senang";
-
-            $textMessageBuilder3 = new TextMessageBuilder($message3);
 
             $stickerMessageBuilder = new StickerMessageBuilder(1, 114);
 
             $multiMessageBuilder = new MultiMessageBuilder();
             $multiMessageBuilder->add($textMessageBuilder);
             $multiMessageBuilder->add($textMessageBuilder2);
-            $multiMessageBuilder->add($textMessageBuilder3);
             $multiMessageBuilder->add($stickerMessageBuilder);
 
             $this->bot->replyMessage($event['replyToken'], $multiMessageBuilder);
@@ -167,12 +158,10 @@ class Webhook extends Controller
         $uID = $event['source']['userId'];
         if ($this->user['number'] == 0) {
             if (strtolower($userMessage) == '/start level 1') {
-                $this->userGateway->setScore($this->user['user_id'], 0);
                 $this->userGateway->setUserProgress($this->user['user_id'], 1);
                 $this->userGateway->setLevel($this->user['user_id'], 1);
                 $this->sendQuestion($event['replyToken'], 1, 1);
             } else if (strtolower($userMessage) == '/start level 2') {
-                $this->userGateway->setScore($this->user['user_id'], 0);
                 $this->userGateway->setUserProgress($this->user['user_id'], 1);
                 $this->userGateway->setLevel($this->user['user_id'], 2);
                 $this->sendQuestion($event['replyToken'], 1, 2);
@@ -234,9 +223,6 @@ class Webhook extends Controller
     private function checkAnswer(string $message, $replyToken, string $level)
     {
         if ($this->questionGateway->isAnswerEqual($this->user['number'], strtolower($message), $level)) {
-            $this->user['score'] + 2;
-            $this->userGateway->setScore($this->user['user_id'], $this->user['score']);
-
             $messageTrue = "Benar, Jawabannya adalah : " . ucwords($message);
             $textMessageBuilderTrue = new TextMessageBuilder($messageTrue);
 
@@ -250,13 +236,13 @@ class Webhook extends Controller
 
                 $this->bot->replyMessage($replyToken, $multiMessageBuilder);
             } else {
-                $message = "Selamat Kamu telah menyelesaikan Level" . $this->user['level'];
+                $message = "Selamat Kamu telah menyelesaikan Level " . $this->user['level'];
                 $textMessageBuilderFinish = new TextMessageBuilder($message);
 
-                $stickerMessageBuilderFinish = new StickerMessageBuilder(1, 100);
+                $stickerMessageBuilderFinish = new StickerMessageBuilder(1, 13);
 
-                $messages = "Ayo Mulai Lagi dengan level berikutnya \n";
-                $messages .= "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai";
+                $messages = "Ayo Mulai Lagi dengan level berikutnya, \n";
+                $messages .= "silahkan kirim \"/start level 1\" atau \"/start level 2\" untuk memulai.";
                 $textmessagebuilders = new TextMessageBuilder($messages);
 
                 $multiMessageBuilder = new MultiMessageBuilder();
@@ -270,7 +256,7 @@ class Webhook extends Controller
                 $this->userGateway->setLevel($this->user['user_id'], 0);
             }
         } else {
-            $message = "Jawaban Kamu Salah, Coba Lagi";
+            $message = "Jawaban Kamu Salah, Coba Lagi.";
             $textMessageBuilder = new TextMessageBuilder($message);
             $sendAgain = $this->sendQuestion($replyToken, $this->user['number'], $level);
 
